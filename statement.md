@@ -1,7 +1,10 @@
 # Débutter en PHP !
 
-    *   Script d'initiation à PHP
-	* 	Auteur: MERY Ludovic
+	* 	Script d'initiation à PHP CRUD
+	*	C --> Création --> Insert
+	*	R --> Read --> SELECT
+	*	U --> Update
+	*	D --> Delete
 	*
 	*	Pour toi Public de SIO 1  !!!
 	*
@@ -18,9 +21,22 @@
 	
 	
 	N'oublie pas de virer les commentaires sur les instructions importantes (qui ne peuvent être testés sur cette plateforme, et oui je n'ai pas accès à un serveur MySQL sur tech.io ) !
+	
+```php runnable	
+<?php
+        //File: connexion.php
+		//Se connecter au serveur SQL
+		$user='root';
+		$pass='';
+		$connexion = new PDO('mysql:host=127.0.0.1;dbname=debutterphp', $user, $pass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
+		//var_dump($connexion);
+?>
+
+```
 
 ```php runnable
 <?php
+        //File: index.php
 //Se connecter au serveur SQL
 	$user='root';
 	$pass='';
@@ -58,4 +74,6 @@
 </html>
 ?>
 ```
+
+
 
