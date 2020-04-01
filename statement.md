@@ -22,9 +22,14 @@
 	
 	N'oublie pas de virer les commentaires sur les instructions importantes (qui ne peuvent être testés sur cette plateforme, et oui je n'ai pas accès à un serveur MySQL sur tech.io ) !
 	
+#Fichier commun de connexion au Serveur SQL
+
 ```php runnable	
 <?php
-        //File: connexion.php
+        /*
+            Fichier: connexion.php
+        */
+        
 		//Se connecter au serveur SQL
 		$user='root';
 		$pass='';
@@ -33,47 +38,113 @@
 ?>
 
 ```
+#Fichier d'accueil : Opération Read : Listing
 
 ```php runnable
 <?php
-        //File: index.php
+        /*
+            Fichier: index.php
+        */
 //Se connecter au serveur SQL
-	$user='root';
-	$pass='';
-//	$connexion = new PDO('mysql:host=127.0.0.1;dbname=debutterphp', $user, $pass);
-	//var_dump($connexion);
+include("connexion.php");
 	
 	//Toujours debugguer sa requete SQL en la plaçant dans une variable
 	$sql="SELECT * from profs";
 	//var_dump($sql);
 	
 	//Exécution de la requete et recupération du jeu d'enregistrement (aussi appelé Curseur)
-//	$jeu=$connexion->query($sql);
+	$jeu=$connexion->query($sql);
 	//var_dump($jeu);
 	
 ?>
 
 <html>
-
+	<h1>Listing des profs</h1>
 	<table border="1">
 		<tr>
+			<th></th>
+			<th></th>
 			<th>id</th>
 			<th>nom</th>
 			<th>prenom</th>
 		</tr>
 		<?php
 		//Itération Pour chaque Ligne (Row) du Jeu d'enregistrement($jeu)
-		//foreach($jeu as $row){?>
+		foreach($jeu as $row){?>
 		<tr>
-			<td><?php //echo $row["id"] ?></td>
-			<td><?php //echo $row["nom"]  ?></td>
-			<td><?php //echo $row["prenom"]  ?></td>
+			<td><a href="delete.php?id=<?php echo $row["id"] ?>">Supprimer</a></td>
+			<td><a href="update.php?id=<?php echo $row["id"] ?>">modifier</a></td>
+			<td><?php echo $row["id"] ?></td>
+			<td><?php echo $row["nom"]  ?></td>
+			<td><?php echo $row["prenom"]  ?></td>
 		</tr>
 		<?php } ?>
 	</table>
+	
+	<a href="formprofs.php">Créer un prof</a>
 </html>
-?>
 ```
+#Fichier formprofs : Opération Create : Formulaire de saisie + traitement associé
 
+```php runnable
+<?php
+        /*
+            Fichier: formprofs.php
+        */
+	if(isset($_POST["bt_submit"])){
+		var_dump($_POST);
+		
+		//Se connecter au serveur SQL
+		include("connexion.php");
+		
+		//Toujours debugguer sa requete SQL en la plaçant dans une variable
+		$_id=htmlentities($_POST["txt_id"]);
+		$_nom=htmlentities($_POST["txt_nom"]);
+		$_prenom=htmlentities($_POST["txt_prenom"]);
+
+
+		$sql="INSERT INTO profs VALUES (:leid, :lenom, :leprenom)";
+		//var_dump($sql);
+			
+		try{
+			$stmt = $connexion->prepare($sql);		
+			
+			$stmt->bindParam(':leid', $_id);
+			$stmt->bindParam(':lenom', $_nom);
+			$stmt->bindParam(':leprenom', $_prenom);
+			
+			$stmt->execute();
+			header('Location: index.php'); 
+		}
+		catch(PDOException $exception){
+			var_dump($exception);
+		}
+	}
+	else{			
+	?>
+	<html>
+		<form action="#" method="POST">
+		
+			<label for="_id">Identifiant</label>
+			<input id="_id" type="text" name="txt_id">
+			
+			<br/>
+			
+			<label for="_nom">Nom</label>
+			<input id="_nom" type="text" name="txt_nom">
+			
+			<br/>
+			
+			<label for="_prenom">Prenom</label>
+			<input id="_prenom" type="text" name="txt_prenom">
+			
+			<br/>
+			
+			<input type="submit" name="bt_submit" value="Valider">
+			
+		</form>
+	</html>
+	<?php }?>
+```
 
 
