@@ -1,7 +1,6 @@
 # Débutter en PHP !
 
 Pour les étudiants SISR
-=======
 
     *     Script d'initiation à PHP CRUD
     *    C --> Création --> Insert
