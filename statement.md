@@ -114,6 +114,7 @@ include("connexion.php");
 			$stmt->bindParam(':leprenom', $_prenom);
 			
 			$stmt->execute();
+			//redirection sur la page d'accueil
 			header('Location: index.php'); 
 		}
 		catch(PDOException $exception){
@@ -146,5 +147,30 @@ include("connexion.php");
 	</html>
 	<?php }?>
 ```
-
-
+#Fichier delete.php : Opération Delete 
+```php runnable
+<?php
+        /*
+            Fichier: delete.php
+        */
+	if(isset($_GET["id"])){
+		
+		//Se connecter au serveur SQL
+		include("connexion.php");
+		
+		$leid=$_GET["id"];
+		
+		$sql="DELETE FROM profs WHERE (id=$leid)";
+		var_dump($sql);
+		
+		$count = $connexion->exec($sql);
+		
+		echo "$count enregistrements supprimés";
+		echo "<br/>";
+		echo "<a href=\"index.php\">retour</a>";
+	}
+	else{
+	    //redirection sur la page d'accueil
+		header('Location: index.php'); 
+	}
+?>
